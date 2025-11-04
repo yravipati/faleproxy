@@ -53,14 +53,17 @@ app.post('/fetch', async (req, res) => {
     }).each(function() {
       // Replace text content but not in URLs or attributes
       const text = $(this).text();
-      const newText = text.replace(/Yale/g, 'Fale').replace(/yale/g, 'fale');
+      let newText = text.replace(/Yale/g, 'Fale').replace(/yale/g, 'fale');
+      // Added Harvard support
+      newText = newText.replace(/Harvard/g, 'Farvard').replace(/harvard/g, 'farvard');
       if (text !== newText) {
         $(this).replaceWith(newText);
       }
     });
     
     // Process title separately
-    const title = $('title').text().replace(/Yale/g, 'Fale').replace(/yale/g, 'fale');
+    let title = $('title').text().replace(/Yale/g, 'Fale').replace(/yale/g, 'fale');
+    title = title.replace(/Harvard/g, 'Farvard').replace(/harvard/g, 'farvard');
     $('title').text(title);
     
     return res.json({ 
