@@ -32,38 +32,20 @@ app.post('/fetch', async (req, res) => {
     // Use cheerio to parse HTML and selectively replace text content, not URLs
     const $ = cheerio.load(html);
     
-    // Function to replace text but skip URLs and attributes
-    function replaceYaleWithFale(i, el) {
-      if ($(el).children().length === 0 || $(el).text().trim() !== '') {
-        // Get the HTML content of the element
-        let content = $(el).html();
-        
-        // Only process if it's a text node
-        if (content && $(el).children().length === 0) {
-          // Replace Yale with Fale in text content only
-          content = content.replace(/Yale/g, 'Fale').replace(/yale/g, 'fale');
-          $(el).html(content);
-        }
-      }
-    }
-    
     // Process text nodes in the body
     $('body *').contents().filter(function() {
       return this.nodeType === 3; // Text nodes only
     }).each(function() {
       // Replace text content but not in URLs or attributes
       const text = $(this).text();
-      let newText = text.replace(/Yale/g, 'Fale').replace(/yale/g, 'fale');
-      // Added Harvard support
-      newText = newText.replace(/Harvard/g, 'Farvard').replace(/harvard/g, 'farvard');
+      const newText = text.replace(/Yale/g, 'Fale').replace(/yale/g, 'fale');
       if (text !== newText) {
         $(this).replaceWith(newText);
       }
     });
     
     // Process title separately
-    let title = $('title').text().replace(/Yale/g, 'Fale').replace(/yale/g, 'fale');
-    title = title.replace(/Harvard/g, 'Farvard').replace(/harvard/g, 'farvard');
+    const title = $('title').text().replace(/Yale/g, 'Fale').replace(/yale/g, 'fale');
     $('title').text(title);
     
     return res.json({ 
@@ -80,7 +62,12 @@ app.post('/fetch', async (req, res) => {
   }
 });
 
-// Start the server
-app.listen(PORT, () => {
-  console.log(`Faleproxy server running at http://localhost:${PORT}`);
-});
+// Export the app for testing
+module.exports = app;
+
+// Start the server only if this file is run directly
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`Faleproxy server running at http://localhost:${PORT}`);
+  });
+}
