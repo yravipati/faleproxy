@@ -81,7 +81,7 @@ describe('Yale to Fale replacement logic', () => {
     expect(modifiedHtml).toContain('<title>Test Page</title>');
     expect(modifiedHtml).toContain('<h1>Hello World</h1>');
     expect(modifiedHtml).toContain('<p>This is a test page with no references.</p>');
-    expect(modifiedHtml).toContain('THIS WILL FAIL'); // Intentional failure to test CI/CD
+    expect(modifiedHtml).toContain('THIS WILL FAIL'); // Test: Verify deployment blocks when tests fail
   });
 
   test('should handle case-insensitive replacements', () => {
